@@ -1,2 +1,2 @@
 # DataBases
-Repository for databases course be Georgiy Korneev in INTO University
+Repository for databases course by Georgiy Korneev in INTO University
