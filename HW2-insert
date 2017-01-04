@@ -1,0 +1,40 @@
+alter table Groups alter column StudentId drop not null;
+
+insert into Groups (Id, Name) values (2, 'M3438');
+insert into Groups (Id, Name) values (1, 'M3439');
+
+alter table Student alter column SubjectId drop not null;
+
+insert into Student (Id, FirstName, SecondName, GroupId) values (1, 'Ruslan', 'Ahundov', 1),
+(2, 'Pavel', 'Asadchy', 2), (3, 'Eugene', 'Varlamov', 2);
+
+update Groups set StudentId = 1 where Id = 1;
+update Groups set StudentId = 2 where Id = 2;
+
+alter table Groups alter column StudentId set not null;
+
+alter table Subject alter column TeacherId drop not null;
+alter table Subject drop constraint subject_student_course_fk1;
+
+insert into Subject (Id, Name, StudentId) values (1, 'DB', 1), (2, 'Java', 2);
+
+insert into StudentCourse (StudentId, SubjectId, Mark) values (1, 1, 4), (2, 1, 5), (3, 1, 3), (1, 2, 5), (2, 2, 3), (3, 2, 5);
+
+alter table Subject add constraint subject_student_course_fk1 foreign key (Id, StudentId) references StudentCourse(SubjectId, StudentId);
+
+alter table Teacher drop constraint teacher_teacher_course_fk;
+
+insert into Teacher (Id, FirstName, LastName, SubjectId) values (1, 'Georgiy', 'Korneev', 1);
+
+insert into TeacherCourse (SubjectId, TeacherId, Hours) values (1, 1, 100), (2, 1, 100);
+
+alter table Teacher add constraint teacher_teacher_course_fk foreign key (Id, SubjectId) references TeacherCourse(TeacherId, SubjectId);
+
+update Subject set TeacherId = 1 where Id = 1 or Id = 2;
+
+alter table Subject alter column TeacherId set not null;
+
+update Student set SubjectId = 1 where Id = 1;
+update Student set SubjectId = 2 where Id = 2 or Id = 3;
+
+alter table Student alter column SubjectId set not null;

@@ -1,0 +1,57 @@
+create table Groups (
+    Id int not null constraint group_pk primary key, 
+    Name varchar(100) not null,
+    StudentId int not null
+);
+
+create table Student (
+    Id int not null constraint student_pk primary key,
+    FirstName varchar(100) not null,
+    SecondName varchar(100) not null,
+    GroupId int not null,
+    SubjectId int not null,
+    constraint student_group_fk_second foreign key (GroupId) references Groups(Id),
+    constraint group_student_unique unique (GroupId, Id)
+);
+
+alter table Groups add constraint group_student_fk1 foreign key (Id, StudentId) references Student(GroupId, Id);
+
+create table StudentCourse (
+    StudentId int not null,
+    SubjectId int not null,
+    Mark int,
+    primary key (StudentId, SubjectId),
+    constraint student_course_student_fk1 foreign key (StudentId) references Student(Id)
+);
+
+alter table Student add constraint student_student_course_fk1 foreign key (Id, SubjectId) references StudentCourse(StudentId, SubjectId);
+
+create table Subject (
+    Id int not null constraint subject_pk primary key,
+    Name varchar(100) not null,
+    StudentId int not null,
+    TeacherId int not null,
+    constraint subject_student_course_fk1 foreign key (Id, StudentId) references StudentCourse(SubjectId, StudentId)
+);
+
+alter table StudentCourse add constraint student_course_subject_fk2 foreign key (SubjectId) references Subject(Id);
+
+create table TeacherCourse (
+    SubjectId int not null,
+    TeacherId int not null,
+    Hours int,
+    primary key(SubjectId, TeacherId),
+    constraint teacher_course_subject_fk1 foreign key (SubjectId) references Subject(Id)
+);
+
+alter table Subject add constraint subject_teacher_course_fk foreign key (Id, TeacherId) references TeacherCourse(SubjectId, TeacherId);
+
+create table Teacher (
+    Id int not null constraint teacher_pk primary key,
+    FirstName varchar(100) not null,
+    LastName varchar(100) not null,
+    SubjectId int not null,
+    constraint teacher_teacher_course_fk foreign key (Id, SubjectId) references TeacherCourse(TeacherId, SubjectId)
+);
+
+alter table TeacherCourse add constraint teacher_course_teacher_fk2 foreign key (TeacherId) references Teacher(Id);
